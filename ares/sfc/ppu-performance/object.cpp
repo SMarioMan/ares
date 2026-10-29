@@ -78,6 +78,7 @@ auto PPU::Object::render() -> void {
 
       Tile tile{true};
       tile.x = objectX;
+      tile.character = (object.nameselect << 8) | object.character;
       tile.priority = object.priority;
       tile.palette = 128 + (object.palette << 4);
       tile.hflip = object.hflip;
@@ -98,6 +99,7 @@ auto PPU::Object::render() -> void {
 
   n8 palette[448];
   n8 priority[448];
+  n15 colors[448];
 
   for(u32 n : range(34)) {
     auto& tile = tiles[n];
@@ -115,6 +117,8 @@ auto PPU::Object::render() -> void {
         if(color) {
           palette[tileX] = tile.palette + color;
           priority[tileX] = io.priority[tile.priority];
+          colors[tileX] = self.dac.cgram[palette[tileX]];
+          if(PPUBase::objectColor) colors[tileX] = PPUBase::objectColor(tile.character, (tile.palette-128)>>4, color, colors[tileX]);
         }
       }
       tileX++;
@@ -125,8 +129,8 @@ auto PPU::Object::render() -> void {
     u32 xp = x + abs(x1);
     if(!priority[xp]) continue;
     n8 source = palette[xp] < 192 ? PPU::Source::OBJ1 : PPU::Source::OBJ2;
-    if(io.aboveEnable && !windowAbove[xp]) self.dac.plotAbove(xp, source, priority[xp], self.dac.cgram[palette[xp]]);
-    if(io.belowEnable && !windowBelow[xp]) self.dac.plotBelow(xp, source, priority[xp], self.dac.cgram[palette[xp]]);
+    if(io.aboveEnable && !windowAbove[xp]) self.dac.plotAbove(xp, source, priority[xp], colors[xp]);
+    if(io.belowEnable && !windowBelow[xp]) self.dac.plotBelow(xp, source, priority[xp], colors[xp]);
   }
 }
 

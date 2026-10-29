@@ -35,6 +35,7 @@ auto Screen::main(uintptr_t) -> void {
     if(_frameCondition.wait_for(lock, timeout, [&] { return _frame.load(); })) {
       refresh();
       _frame = false;
+      _frameDoneCondition.notify_all();
     }
 
     if(_kill) break;
@@ -226,6 +227,13 @@ auto Screen::colors(u32 colors, std::function<n64 (n32)> color) -> void {
   _palette.reset();
   refreshPalette();
   _phosphorHistoryValid = false;
+}
+
+auto Screen::waitForFrame() -> void {
+  if constexpr(ares::Video::Threaded) {
+    unique_lock<mutex> lock(_frameMutex);
+    _frameDoneCondition.wait(lock, [&] { return !_frame.load(); });
+  }
 }
 
 auto Screen::frame() -> void {

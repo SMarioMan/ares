@@ -85,3 +85,14 @@ Contributing
 ------------
 
 Please join our discord to chat with other ares developers: https://discord.com/invite/gz2quhk2kv
+
+Linked Super Mario Kart development
+----------------------------------
+
+The `feature/snes-link-8p` branch includes an optional SNES link worker and ROM adapter
+for 2–8-player Grand Prix and balloon battle. Build this repository's root Dockerfile
+with `docker build -t smk-link-ares .`; `docker run --rm smk-link-ares --help` starts
+the launcher help. See [Docker build/run instructions](tools/link-lab/docker/README.md)
+and the [linked frontend guide](tools/link-lab/README.md). The companion
+Super-Mario-Kart-Disassembly repository has its own Dockerfile for rebuilding the
+cartridges from a commercial USA ROM. The regular Ares desktop frontend is also built.

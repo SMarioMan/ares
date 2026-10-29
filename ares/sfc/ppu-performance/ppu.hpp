@@ -345,6 +345,7 @@ struct PPU : PPUBase::Implementation, PPUcounter {
     struct Tile {
       n1  valid;
       n9  x;
+      n9  character;
       n2  priority;
       n8  palette;
       n1  hflip;

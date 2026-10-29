@@ -64,6 +64,9 @@ struct Screen : Video {
 
   auto colors(u32 colors, std::function<n64 (n32)> color) -> void;
   auto frame() -> void;
+  // Consumers that restore speculative state must let its queued frame finish
+  // before changing the producer's buffers or presenting the captured image.
+  auto waitForFrame() -> void;
   auto refresh() -> void;
   auto lookupPalette(u32 index) -> u32;
   auto overrideLineDraw(u32 y, const u32* source) -> void;
@@ -112,6 +115,7 @@ protected:
   recursive_mutex _mutex;
   mutex _frameMutex;
   condition_variable _frameCondition;
+  condition_variable _frameDoneCondition;
   atomic<bool> _kill = false;
   atomic<bool> _frame = false;
   std::function<void ()> _refresh;

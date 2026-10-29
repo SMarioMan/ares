@@ -67,6 +67,8 @@ auto PPU::DAC::below(bool hires) -> n16 {
   if(obj.output.below.priority > priority) {
     priority = obj.output.below.priority;
     math.below.color = paletteColor(obj.output.below.palette);
+    if(PPUBase::objectColor) math.below.color = PPUBase::objectColor(obj.output.below.character,
+      (obj.output.below.palette-128)>>4, obj.output.below.palette&15, math.below.color);
   }
   if(math.transparent = (priority == 0)) math.below.color = paletteColor(0);
 
@@ -110,6 +112,8 @@ auto PPU::DAC::above() -> n16 {
   if(obj.output.above.priority > priority) {
     priority = obj.output.above.priority;
     math.above.color = paletteColor(obj.output.above.palette);
+    if(PPUBase::objectColor) math.above.color = PPUBase::objectColor(obj.output.above.character,
+      (obj.output.above.palette-128)>>4, obj.output.above.palette&15, math.above.color);
     math.below.colorEnable = io.obj.colorEnable && obj.output.above.palette >= 192;
   }
   if(priority == 0) {

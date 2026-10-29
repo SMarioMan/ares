@@ -1,0 +1,17 @@
+.git
+**/.git
+**/__pycache__
+**/build
+**/rundir
+**/*.sfc
+**/*.smc
+**/*.srm
+**/*.state
+**/*.brr
+**/*.lz5
+/core
+**/*.log
+**/*.bin
+smk-link-build
+**/*.exe
+**/*.dll

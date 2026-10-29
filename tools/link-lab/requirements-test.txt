@@ -1,0 +1,3 @@
+# Only the optional X11/SDL integration test needs third-party Python packages.
+python-xlib==0.33
+Pillow==12.0.0

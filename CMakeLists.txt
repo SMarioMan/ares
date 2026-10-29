@@ -52,6 +52,14 @@ endif()
 
 add_subdirectory(tools/sourcery)
 
+option(ARES_BUILD_LINK_LAB "Build the experimental SNES lockstep validation worker" OFF)
+if(ARES_BUILD_LINK_LAB)
+  if(NOT "sfc" IN_LIST ARES_CORES)
+    message(FATAL_ERROR "ARES_BUILD_LINK_LAB requires the sfc core")
+  endif()
+  add_subdirectory(tools/link-lab)
+endif()
+
 message_configuration()
 
 add_subdirectory(.github)

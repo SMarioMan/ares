@@ -175,6 +175,7 @@ auto PPU::Object::serialize(serializer& s) -> void {
     for(u32 n : range(34)) {
       s(t.tile[p][n].valid);
       s(t.tile[p][n].x);
+      s(t.tile[p][n].character);
       s(t.tile[p][n].priority);
       s(t.tile[p][n].palette);
       s(t.tile[p][n].hflip);
@@ -184,9 +185,11 @@ auto PPU::Object::serialize(serializer& s) -> void {
 
   s(output.above.priority);
   s(output.above.palette);
+  s(output.above.character);
 
   s(output.below.priority);
   s(output.below.palette);
+  s(output.below.character);
 }
 
 auto PPU::Window::serialize(serializer& s) -> void {

@@ -11,6 +11,8 @@ struct Stream : Audio {
   auto setFrequency(f64 frequency) -> void;
   auto setResamplerFrequency(f64 resamplerFrequency) -> void;
   auto setMuted(bool muted) -> void;
+  // Speculative presentation must not advance output filters or resamplers.
+  auto setDiscard(bool discard) -> void { _discard = discard; }
 
   auto resetFilters() -> void;
   auto addLowPassFilter(f64 cutoffFrequency, u32 order, u32 passes = 1) -> void;
@@ -24,7 +26,7 @@ struct Stream : Audio {
 
   template<typename... P>
   auto frame(P&&... p) -> void {
-    if(runAhead()) return;
+    if(runAhead() || _discard) return;
     f64 samples[sizeof...(p)] = {f64(std::forward<P>(p))...};
     write(samples);
   }
@@ -46,4 +48,5 @@ protected:
   f64 _frequency = 48000.0;
   f64 _resamplerFrequency = 48000.0;
   bool _muted = false;
+  bool _discard = false;
 };

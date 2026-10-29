@@ -77,11 +77,13 @@ auto PPU::Object::run() -> void {
     if(color) {
       if(io.aboveEnable) {
         output.above.palette = tile.palette + color;
+        output.above.character = tile.character;
         output.above.priority = io.priority[tile.priority];
       }
 
       if(io.belowEnable) {
         output.below.palette = tile.palette + color;
+        output.below.character = tile.character;
         output.below.priority = io.priority[tile.priority];
       }
     }
@@ -138,6 +140,7 @@ auto PPU::Object::fetch() -> void {
       u32 n = t.tileCount - 1;
       oamTile[n].valid = true;
       oamTile[n].x = sx;
+      oamTile[n].character = (sprite.nameselect << 8) | sprite.character;
       oamTile[n].priority = sprite.priority;
       oamTile[n].palette = 128 + (sprite.palette << 4);
       oamTile[n].hflip = sprite.hflip;
@@ -176,6 +179,7 @@ auto PPU::Object::power() -> void {
     for(auto& tile : t.tile[p]) {
       tile.valid = false;
       tile.x = 0;
+      tile.character = 0;
       tile.priority = 0;
       tile.palette = 0;
       tile.hflip = 0;
@@ -200,7 +204,9 @@ auto PPU::Object::power() -> void {
   latch = {};
 
   output.above.palette = 0;
+  output.above.character = 0;
   output.above.priority = 0;
   output.below.palette = 0;
+  output.below.character = 0;
   output.below.priority = 0;
 }

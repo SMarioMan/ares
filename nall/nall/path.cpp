@@ -71,7 +71,9 @@ NALL_HEADER_INLINE auto user() -> string {
   result.transform("\\", "/");
   #else
   struct passwd* userinfo = getpwuid(getuid());
-  string result = userinfo->pw_dir;
+  string result;
+  if(userinfo) result = userinfo->pw_dir;
+  else if(const char* homeDirectory = getenv("HOME")) result = homeDirectory;
   #endif
   if(!result) result = ".";
   if(!result.endsWith("/")) result.append("/");

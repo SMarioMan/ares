@@ -21,6 +21,9 @@ struct PPUBase {
 
   Implementation* implementation = nullptr;
   bool accurate = false;
+  // Optional cartridge/front-end OBJ palette extension. The default path uses
+  // CGRAM unchanged; overrides participate in normal priority and color math.
+  inline static std::function<n15 (n9, n3, n4, n15)> objectColor;
 
   auto setAccurate(bool value) -> void;
 
@@ -402,6 +405,7 @@ struct PPU : PPUBase::Implementation, PPUcounter {
     struct Tile {
       n1  valid;
       n9  x;
+      n9  character;
       n2  priority;
       n8  palette;
       n1  hflip;
@@ -424,6 +428,7 @@ struct PPU : PPUBase::Implementation, PPUcounter {
       struct Pixel {
         n8 priority;  //0 = none (transparent)
         n8 palette;
+        n9 character;
       } above, below;
     } output;
   } obj{*this, vram, oam};

@@ -25,6 +25,8 @@
 !deps.json
 !CMakeLists.txt
 !CMakePresets.json
+!/Dockerfile
+!/.dockerignore
 
 # Exclude old macOS Finder metadata
 .DS_Store
@@ -51,3 +53,6 @@ tests/m68000/tests
 # Exclude unused legacy zlib header that is renamed by CMake
 thirdparty/libchdr/deps/zlib-*/zconf.h
 thirdparty/libchdr/deps/zlib-*/zconf.h.included
+
+# Local Docker build exports
+/smk-link-build/
